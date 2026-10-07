@@ -131,7 +131,8 @@ export default function OcorrenciaFilterMap({
             return;
         }
 
-        loadEnderecos(filters.microAreaId);
+        let rs = async ()=>{await loadEnderecos(filters.microAreaId);}
+        rs()
     }, [filters.microAreaId]);
 
     /*
