@@ -128,8 +128,8 @@ export default function NavBar({
             case "FormularioA":
                 return pathname === "/FormularioA";
 
-            case "Dashboard":
-                return pathname === "/dashboard";
+            case "GraphsPage":
+                return pathname === "/GraphsPage";
 
             case "Map":
                 return pathname === "/map";
@@ -226,8 +226,25 @@ export default function NavBar({
                         )}
 
                     <View style={styles.spacer} />
+                    {user?.name &&
+                        user?.roles?.[0] === "admin" && (
+                            <NavItem
+                                icon="wpforms"
+                                text={(!isSmallScreen) ? "Dashboard" : ""}
+                                active={isActive(
+                                    "GraphsPage"
+                                )}
+                                onPress={() =>
+                                    navigateTo(
+                                        "GraphsPage"
+                                    )
+                                }
+                            />
+                        )}
 
-                    {/* USUÁRIO LOGADO */}
+                    <View style={styles.spacer} />
+
+                    {/* USUÁRIO LOGADO GraphsPage*/}
                     {user?.name && (
                         <>
                         {!isSmallScreen &&
