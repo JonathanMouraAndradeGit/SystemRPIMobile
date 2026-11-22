@@ -23,6 +23,7 @@ import TxtInput from "../TXTInput/TxtInput";
 //import SelectInput from "../../Component/SelectInput/SelectInput";
 //import CpfInput from "../../Component/CpfInput/CpfInput";
 
+import checkEmail from "@/Service/checkEmail";
 import apiFetch from "../FetchFunc/APIFetch";
 
 
@@ -179,11 +180,7 @@ export default function UserForm({
             newErrors.email = "Campo obrigatório";
         } else if (//!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)
             ///^\S+@\S+\.\S+$/.test(form.email)
-            !form.email.includes("@") ||
-            form.email.indexOf("@") !== form.email.lastIndexOf("@") ||
-            !form.email.split("@")[1].includes(".") ||
-            form.email.split("@")[1].startsWith(".") ||
-            form.email.split("@")[1].endsWith(".")
+            checkEmail(form)
         ) {
             newErrors.email = "E-mail inválido";
         }

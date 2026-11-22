@@ -16,6 +16,8 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import SelectInput from "../SelectInput/SelectInput";
 import TxtInput from "../TXTInput/TxtInput";
 
+import checkEmail from "../../Service/checkEmail";
+
 const INITIAL_FORM = {
     name: "",
     cpf: "",
@@ -143,11 +145,7 @@ export default function RegisterModal({
                 form.email
             )*/
             ///^\S+@\S+\.\S+$/.test(form.email)
-            !form.email.includes("@") ||
-            form.email.indexOf("@") !== form.email.lastIndexOf("@") ||
-            !form.email.split("@")[1].includes(".") ||
-            form.email.split("@")[1].startsWith(".") ||
-            form.email.split("@")[1].endsWith(".")
+            checkEmail(form)
         ) {
             newErrors.email =
                 "E-mail inválido";

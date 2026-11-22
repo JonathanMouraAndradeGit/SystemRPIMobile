@@ -17,6 +17,7 @@ import apiFetch from "../FetchFunc/APIFetch";
 import SelectInput from "../SelectInput/SelectInput";
 import TxtInput from "../TXTInput/TxtInput";
 
+import checkEmail from "@/Service/checkEmail";
 import ErrMsg from "../Alerts/ErrMsg2";
 import OKMsg from "../Alerts/OKMsg2";
 const INITIAL_FORM = {
@@ -195,11 +196,7 @@ export default function UserForm({
     } else if (
       //!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
       ///^\S+@\S+\.\S+$/.test(form.email)
-      !form.email.includes("@") ||
-      form.email.indexOf("@") !== form.email.lastIndexOf("@") ||
-      !form.email.split("@")[1].includes(".") ||
-      form.email.split("@")[1].startsWith(".") ||
-      form.email.split("@")[1].endsWith(".")
+      checkEmail(form)
     ) {
       newErrors.email =
         "E-mail inválido";
