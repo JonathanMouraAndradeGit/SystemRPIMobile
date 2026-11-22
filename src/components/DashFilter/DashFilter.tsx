@@ -592,7 +592,8 @@ export default function DashFilter() {
     }
 
 
-    initializeSocket();
+    initializeSocket().then(logs => console.log(logs))
+    .catch(error => reportError(error));
 
 
     // ==================================================
