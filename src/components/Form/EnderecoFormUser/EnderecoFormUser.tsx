@@ -69,7 +69,7 @@ export default function EnderecoFormUser({
     const [currentUser, setCurrentUser] = useState<any>(null);
 
     useEffect(() => {
-        initialize();
+        void  initialize()//.catch(error => reportError(error));;
     }, []);
 
 
@@ -138,7 +138,7 @@ export default function EnderecoFormUser({
             microAreaId: String(obj.microArea?.id ?? ""),
         });
         if (ubsId && !isCommonUser) {
-            loadMicroArea(ubsId);
+            void loadMicroArea(ubsId);
         }
     }, [obj]);
 
@@ -147,7 +147,8 @@ export default function EnderecoFormUser({
         setErrors(prev => ({ ...prev, [name]: "", }));
         if (name === "ubs") {
             setForm(prev => ({ ...prev, microAreaId: "", }));
-            loadMicroArea(value);
+            void loadMicroArea(value)
+            //.catch(error => reportError(error));
         }
 
     }
@@ -197,12 +198,12 @@ export default function EnderecoFormUser({
         if (!form.logradouro?.trim() || !String(form.numero ?? "").trim()
         ) {
             console.log("Selecione um endereço e informe o número.")
-            ErrMsg("Selecione um endereço e informe o número.");
+            void ErrMsg("Selecione um endereço e informe o número.");
             return;
         }
         if (!form.microAreaId) {
             console.log("Selecione uma Micro Área.")
-            ErrMsg("Selecione uma Micro Área.");
+            void ErrMsg("Selecione uma Micro Área.");
             return;
         }
 
