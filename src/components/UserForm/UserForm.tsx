@@ -42,7 +42,7 @@ export default function UserForm({
     onClose,
     onSuccess,
     setRe,
-}:any) {
+}: any) {
 
     const [form, setForm] = useState<any>(INITIAL_FORM);
 
@@ -139,7 +139,7 @@ export default function UserForm({
 
             setUbsList(data);
 
-        } catch (error:any) {
+        } catch (error: any) {
 
             console.error(
                 "Erro ao carregar UBS:",
@@ -154,18 +154,18 @@ export default function UserForm({
             );
         }
     }
-    function handleChange(name:any, value:any) {
-        setForm((prev:any) => ({
+    function handleChange(name: any, value: any) {
+        setForm((prev: any) => ({
             ...prev,
             [name]: value,
         }));
-        setErrors((prev:any) => ({
+        setErrors((prev: any) => ({
             ...prev,
             [name]: "",
         }));
     }
     function validate() {
-        const newErrors:any = {};
+        const newErrors: any = {};
         const cpf = form.cpf.replace(/\D/g, "");
         if (!form.name.trim()) {
             newErrors.name = "Campo obrigatório";
@@ -178,10 +178,16 @@ export default function UserForm({
         if (!form.email.trim()) {
             newErrors.email = "Campo obrigatório";
         } else if (//!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)
-            /^\S+@\S+\.\S+$/.test(form.email)) {
-            newErrors.email ="E-mail inválido";
+            ///^\S+@\S+\.\S+$/.test(form.email)
+            !form.email.includes("@") ||
+            form.email.indexOf("@") !== form.email.lastIndexOf("@") ||
+            !form.email.split("@")[1].includes(".") ||
+            form.email.split("@")[1].startsWith(".") ||
+            form.email.split("@")[1].endsWith(".")
+        ) {
+            newErrors.email = "E-mail inválido";
         }
-        if (!editing &&!form.password.trim()) {
+        if (!editing && !form.password.trim()) {
             newErrors.password = "Campo obrigatório";
         } else if (form.password && form.password.length < 6) {
             newErrors.password = "A senha deve possuir no mínimo 6 caracteres";
@@ -201,7 +207,7 @@ export default function UserForm({
         }
         try {
             setLoading(true);
-            const payload:any = {
+            const payload: any = {
                 name: form.name.trim(),
                 cpf: form.cpf.replace(/\D/g, ""),
                 email: form.email.trim(),
@@ -212,7 +218,7 @@ export default function UserForm({
             if (form.password.trim()) {
                 payload.password = form.password;
             }
-            console.log("Payload enviado:",payload);
+            console.log("Payload enviado:", payload);
             const url = editing
                 ? `${process.env.REACT_APP_BACK_ROUTE}/users/${user.id}`
                 : `${process.env.REACT_APP_BACK_ROUTE}/users`;
@@ -220,7 +226,7 @@ export default function UserForm({
                 url,
                 {
                     method: editing ? "PUT" : "POST",
-                    headers: {"Content-Type":"application/json",},
+                    headers: { "Content-Type": "application/json", },
                     body: JSON.stringify(payload),
                 }
             );
@@ -228,14 +234,14 @@ export default function UserForm({
             if (!response.ok) {
                 throw new Error(data.message || "Erro ao salvar usuário.");
             }
-            Alert.alert("Sucesso",editing ? "Usuário atualizado!" : "Usuário cadastrado!");
+            Alert.alert("Sucesso", editing ? "Usuário atualizado!" : "Usuário cadastrado!");
             setRe?.({});
             onSuccess?.();
             setForm(INITIAL_FORM);
             setErrors({});
-        } catch (error:any) {
-            console.error("Erro ao salvar usuário:",error);
-            Alert.alert("Erro",error.message || "Ocorreu um erro ao salvar o usuário.");
+        } catch (error: any) {
+            console.error("Erro ao salvar usuário:", error);
+            Alert.alert("Erro", error.message || "Ocorreu um erro ao salvar o usuário.");
         } finally {
             setLoading(false);
         }
@@ -270,8 +276,8 @@ export default function UserForm({
                             id="name"
                             label="Nome"
                             value={form.name}
-                            onChangeText={(value:any) =>
-                                handleChange("name",value)
+                            onChangeText={(value: any) =>
+                                handleChange("name", value)
                             }
                             logo={
                                 <FontAwesome name="user" size={24} color="black" />
@@ -282,7 +288,7 @@ export default function UserForm({
                             id="cpf"
                             label="CPF"
                             value={form.cpf}
-                            onChange={(value:any) =>
+                            onChange={(value: any) =>
                                 handleChange(
                                     "cpf",
                                     value
@@ -294,7 +300,7 @@ export default function UserForm({
                             id="email"
                             label="Email"
                             value={form.email}
-                            onChangeText={(value:any) =>
+                            onChangeText={(value: any) =>
                                 handleChange(
                                     "email",
                                     value
@@ -315,7 +321,7 @@ export default function UserForm({
                                     : "Senha"
                             }
                             value={form.password}
-                            onChangeText={(value:any) =>
+                            onChangeText={(value: any) =>
                                 handleChange(
                                     "password",
                                     value
@@ -335,17 +341,17 @@ export default function UserForm({
                             id="ubsId"
                             label="UBS"
                             value={form.ubsId}
-                            onChange={(value:any) =>
+                            onChange={(value: any) =>
                                 handleChange(
                                     "ubsId",
                                     value
                                 )
                             }
                             logo={
-                               <FontAwesome5 name="hospital" size={24} color="black" />
+                                <FontAwesome5 name="hospital" size={24} color="black" />
                             }
                             options={ubsList.map(
-                                (ubs:any) => ({
+                                (ubs: any) => ({
                                     value:
                                         String(
                                             ubs.id
@@ -365,7 +371,7 @@ export default function UserForm({
                             id="role"
                             label="Perfil"
                             value={form.role}
-                            onChange={(value:any) =>
+                            onChange={(value: any) =>
                                 handleChange(
                                     "role",
                                     value
@@ -392,7 +398,7 @@ export default function UserForm({
                             value={String(
                                 form.active
                             )}
-                            onChange={(value:any) => {
+                            onChange={(value: any) => {
 
                                 handleChange(
                                     "active",
@@ -420,7 +426,7 @@ export default function UserForm({
                                     styles.submitButton,
 
                                     loading &&
-                                        styles.submitDisabled,
+                                    styles.submitDisabled,
                                 ]}
                             >
 

@@ -65,7 +65,7 @@ export default function RegisterModal({
             if (!response.ok) {
                 throw new Error(
                     data.message ||
-                        "Erro ao carregar UBS."
+                    "Erro ao carregar UBS."
                 );
             }
 
@@ -79,7 +79,7 @@ export default function RegisterModal({
             Alert.alert(
                 "Erro",
                 error?.message ||
-                    "Não foi possível carregar as UBS."
+                "Não foi possível carregar as UBS."
             );
         }
     }
@@ -142,7 +142,12 @@ export default function RegisterModal({
             /*!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
                 form.email
             )*/
-           /^\S+@\S+\.\S+$/.test(form.email)
+            ///^\S+@\S+\.\S+$/.test(form.email)
+            !form.email.includes("@") ||
+            form.email.indexOf("@") !== form.email.lastIndexOf("@") ||
+            !form.email.split("@")[1].includes(".") ||
+            form.email.split("@")[1].startsWith(".") ||
+            form.email.split("@")[1].endsWith(".")
         ) {
             newErrors.email =
                 "E-mail inválido";
@@ -223,7 +228,7 @@ export default function RegisterModal({
             if (!response.ok) {
                 throw new Error(
                     data.message ||
-                        "Erro ao cadastrar."
+                    "Erro ao cadastrar."
                 );
             }
 
@@ -241,7 +246,7 @@ export default function RegisterModal({
             Alert.alert(
                 "Erro",
                 error?.message ||
-                    "Erro ao cadastrar usuário."
+                "Erro ao cadastrar usuário."
             );
         } finally {
             setLoading(false);
@@ -262,7 +267,7 @@ export default function RegisterModal({
                             styles.closeBtn,
 
                             pressed &&
-                                styles.closePressed,
+                            styles.closePressed,
                         ]}
                         onPress={onClose}
                     >
@@ -447,15 +452,15 @@ export default function RegisterModal({
                                 style={({
                                     pressed,
                                 }) => [
-                                    styles.button,
+                                        styles.button,
 
-                                    loading &&
+                                        loading &&
                                         styles.buttonDisabled,
 
-                                    pressed &&
+                                        pressed &&
                                         !loading &&
                                         styles.buttonPressed,
-                                ]}
+                                    ]}
                             >
                                 {loading ? (
                                     <>

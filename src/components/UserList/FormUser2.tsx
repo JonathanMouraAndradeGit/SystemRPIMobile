@@ -194,9 +194,12 @@ export default function UserForm({
         "Campo obrigatório";
     } else if (
       //!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
-      /^\S+@\S+\.\S+$/.test(
-        form.email
-      )
+      ///^\S+@\S+\.\S+$/.test(form.email)
+      !form.email.includes("@") ||
+      form.email.indexOf("@") !== form.email.lastIndexOf("@") ||
+      !form.email.split("@")[1].includes(".") ||
+      form.email.split("@")[1].startsWith(".") ||
+      form.email.split("@")[1].endsWith(".")
     ) {
       newErrors.email =
         "E-mail inválido";
