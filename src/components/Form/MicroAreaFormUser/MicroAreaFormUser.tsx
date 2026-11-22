@@ -383,30 +383,16 @@ export default function MicroAreaFormUser({
 
             }
 
-
-            await OKMsg(
-                "Operação realizada com sucesso!"
-            );
-
-
-            /*
-             * Callback do componente pai
-             */
-
+            OKMsg("Operação realizada com sucesso!");
             onSuccess?.();
+            setForm(INITIAL_FORM);
+            setErrors({});
+            
 
 
             /*
              * Limpa o formulário
              */
-
-            setForm(
-                INITIAL_FORM
-            );
-
-            setErrors({});
-
-
         } catch (error) {
 
             console.error(

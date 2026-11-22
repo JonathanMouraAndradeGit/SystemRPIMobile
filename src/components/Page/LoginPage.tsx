@@ -102,36 +102,26 @@ export default function LoginPage({
         try {
             setLoading(true);
 
-            const BACK_ROUTE =
-                process.env
-                    .EXPO_PUBLIC_BACK_ROUTE;
-
+            const BACK_ROUTE = process.env.EXPO_PUBLIC_BACK_ROUTE;
             if (!BACK_ROUTE) {
-                throw new Error(
-                    "A variável EXPO_PUBLIC_BACK_ROUTE não está configurada."
-                );
+                throw new Error("A variável EXPO_PUBLIC_BACK_ROUTE não está configurada.");
             }
 
             const response = await fetch(
                 `${BACK_ROUTE}/auth/login`,
                 {
                     method: "POST",
-
                     headers: {
-                        "Content-Type":
-                            "application/json",
+                        "Content-Type": "application/json",
                     },
-
                     body: JSON.stringify({
                         cpf: form.cpf,
-                        password:
-                            form.password,
+                        password: form.password,
                     }),
                 }
             );
 
-            const data =
-                await response.json();
+            const data = await response.json();
 
             if (!response.ok) {
                 throw new Error(
@@ -149,30 +139,15 @@ export default function LoginPage({
                 "user",
                 JSON.stringify(data.user)
             );
-
             if (setUserAuth) {
                 setUserAuth({});
             }
-
-            Alert.alert(
-                "Sucesso",
-                "Login realizado com sucesso!",
-                [
-                    {
-                        text: "OK",
-
-                        onPress: () => {
-                            router.replace("/");
-                        },
-                    },
-                ]
+            Alert.alert("Sucesso","Login realizado com sucesso!",
+                [{text: "OK"/*,onPress: () => {router.replace("/");}*/,},]
             );
+            router.replace("/");
         } catch (err: any) {
-            Alert.alert(
-                "Erro",
-                err?.message ||
-                "Erro ao realizar login."
-            );
+            Alert.alert("Erro",err?.message || "Erro ao realizar login.");
         } finally {
             setLoading(false);
         }
@@ -305,31 +280,15 @@ export default function LoginPage({
                                 ]}>
                                 <FontAwesome5
                                     name="lock"
-                                    size={
-                                        isVerySmallScreen
-                                            ? 15
-                                            : 17
-                                    }
+                                    size={isVerySmallScreen ? 15 : 17}
                                     color="#3c6a48"
-                                    style={
-                                        styles.inputIcon
-                                    }
+                                    style={styles.inputIcon}
                                 />
 
                                 <TextInput
-                                    style={
-                                        styles.input
-                                    }
-                                    value={
-                                        form.password
-                                    }
-                                    onChangeText={(
-                                        value
-                                    ) =>
-                                        handleChange(
-                                            "password",
-                                            value
-                                        )
+                                    style={styles.input}
+                                    value={form.password}
+                                    onChangeText={(value) =>handleChange("password",value)
                                     }
                                     placeholder="Digite sua senha"
                                     placeholderTextColor="#999999"
@@ -366,48 +325,21 @@ export default function LoginPage({
                         >
                             {loading ? (
                                 <>
-                                    <ActivityIndicator
-                                        size="small"
-                                        color="#ffffff"
-                                    />
-
-                                    <Text
-                                        style={
-                                            styles.buttonText
-                                        }
-                                    >
-                                        Entrando...
-                                    </Text>
+                                    <ActivityIndicator size="small" color="#ffffff"/>
+                                    <Text style={styles.buttonText}>Entrando...</Text>
                                 </>
                             ) : (
-                                <Text
-                                    style={
-                                        styles.buttonText
-                                    }
-                                >
-                                    Entrar
-                                </Text>
-                            )}
+                                <Text style={styles.buttonText}>Entrar</Text>)}
                         </Pressable>
 
                         {/* CADASTRO */}
 
                         <Pressable
-                            onPress={() =>
-                                setShowRegisterModal(
-                                    true
-                                )
-                            }
+                            onPress={() =>setShowRegisterModal(true)}
                             disabled={loading}
-                            style={
-                                styles.registerButton
-                            }
+                            style={styles.registerButton}
                         >
-                            <Text
-                                style={
-                                    styles.cad
-                                }
-                            >
+                            <Text style={styles.cad}>
                                 Cadastro
                             </Text>
                         </Pressable>

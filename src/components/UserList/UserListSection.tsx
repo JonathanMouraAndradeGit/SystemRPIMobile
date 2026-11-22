@@ -2,19 +2,19 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect, useRef, useState } from "react";
 import {
-    Alert,
-    FlatList,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  FlatList,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View
 } from "react-native";
 import { io, Socket } from "socket.io-client";
 
+import ErrMsg from "../Alerts/ErrMsg";
+import OKMsg from "../Alerts/OKMsg";
 import apiFetch from "../FetchFunc/APIFetch";
 import PageItemSelector from "../PageItemSelector/PageItemSelector";
-
 interface User {
   id: string | number;
   name: string;
@@ -41,7 +41,9 @@ export default function UserListSection({
   const socketRef = useRef<Socket | null>(null);
 
   useEffect(() => {
-    load(page, filter);
+    async () => {
+      await load(page, filter);
+    }
   }, [page, filter]);
 
   useEffect(() => {
@@ -72,10 +74,10 @@ export default function UserListSection({
           }
         });
 
-        socket.on("usrlst:change", () => {
+        socket.on("usrlst:change", async () => {
           console.log("Socket: usrlst:change recebido");
 
-          load(page, filter);
+          await load(page, filter);
         });
 
         socket.on("connect_error", (error) => {
@@ -132,7 +134,7 @@ export default function UserListSection({
   }
 
   async function remove(id: string | number) {
-    Alert.alert(
+    /*Alert.alert(
       "Excluir usuário",
       "Deseja realmente excluir este usuário?",
       [
@@ -143,23 +145,25 @@ export default function UserListSection({
         {
           text: "Excluir",
           style: "destructive",
-          onPress: async () => {
-            try {
-              await apiFetch(
-                `${process.env.EXPO_PUBLIC_BACK_ROUTE}/users/${id}`,
-                {
-                  method: "DELETE",
-                }
-              );
+          onPress: async () => {*/
+    try {
+      await apiFetch(
+        `${process.env.EXPO_PUBLIC_BACK_ROUTE}/users/${id}`,
+        {
+          method: "DELETE",
+        }
+      );
+      OKMsg("usuário excluido")
 
-              load(page, filter);
-            } catch (error) {
-              console.error("Erro ao excluir usuário:", error);
-            }
+      load(page, filter);
+    } catch (error) {
+      ErrMsg("Erro ao excluir usuário:")
+      console.error("Erro ao excluir usuário:", error);
+    }/*
           },
         },
       ]
-    );
+    );*/
   }
 
   function editarUsuario(user: User) {

@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import {
-    ActivityIndicator,
-    Alert,
-    Modal,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  ActivityIndicator,
+  Alert,
+  Modal,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
 
 import { FontAwesome5 } from "@expo/vector-icons";
@@ -17,6 +17,8 @@ import apiFetch from "../FetchFunc/APIFetch";
 import SelectInput from "../SelectInput/SelectInput";
 import TxtInput from "../TXTInput/TxtInput";
 
+import ErrMsg from "../Alerts/ErrMsg2";
+import OKMsg from "../Alerts/OKMsg2";
 const INITIAL_FORM = {
   name: "",
   cpf: "",
@@ -119,7 +121,7 @@ export default function UserForm({
       Alert.alert(
         "Erro",
         error?.message ||
-          "Erro ao carregar UBS."
+        "Erro ao carregar UBS."
       );
     }
   }
@@ -127,6 +129,8 @@ export default function UserForm({
   /*
    * Atualiza campo do formulário
    */
+
+  /*
   function handleChange(
     name: string,
     value: string
@@ -135,11 +139,20 @@ export default function UserForm({
       ...prev,
       [name]: value,
     }));
+    setErrors((prev) => ({
+      ...prev,
+      [name]: "",
+    }));
+  }*/
+  function handleChange(
+    name: string,
+    value: string | boolean
+  ) {
+    setForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
 
-    /*
-     * Remove o erro daquele campo
-     * quando o usuário altera o valor.
-     */
     setErrors((prev) => ({
       ...prev,
       [name]: "",
@@ -297,10 +310,19 @@ export default function UserForm({
       if (!response.ok) {
         throw new Error(
           data.message ||
-            "Erro ao salvar usuário."
+          "Erro ao salvar usuário."
         );
       }
 
+      OKMsg(editing
+        ? "Usuário atualizado!"
+        : "Usuário cadastrado!")
+      setRe?.({});
+      onSuccess?.();
+      setForm(INITIAL_FORM);
+      setErrors({});
+      onClose();
+      /*
       Alert.alert(
         "Sucesso",
         editing
@@ -310,33 +332,19 @@ export default function UserForm({
           {
             text: "OK",
             onPress: () => {
-              /*
-               * Atualiza a lista
-               * do componente pai.
-               */
               setRe?.({});
-
-              /*
-               * Callback de sucesso.
-               */
               onSuccess?.();
-
-              /*
-               * Limpa formulário.
-               */
               setForm(INITIAL_FORM);
-
               setErrors({});
-
-              /*
-               * Fecha modal.
-               */
               onClose();
             },
           },
         ]
-      );
+      );*/
     } catch (error: any) {
+      ErrMsg(error?.message ||
+        "Ocorreu um erro ao salvar o usuário.")
+      /*
       console.error(
         "Erro ao salvar usuário:",
         error
@@ -345,8 +353,8 @@ export default function UserForm({
       Alert.alert(
         "Erro",
         error?.message ||
-          "Ocorreu um erro ao salvar o usuário."
-      );
+        "Ocorreu um erro ao salvar o usuário."
+      );*/
     } finally {
       setLoading(false);
     }
@@ -426,8 +434,6 @@ export default function UserForm({
             />
 
             {/*
-             * CPF
-             */}
             <CpfInput
               id="cpf"
               name="cpf"
@@ -438,6 +444,16 @@ export default function UserForm({
                   "cpf",
                   value
                 )
+              }
+              error={errors.cpf}
+            />*/}
+            <CpfInput
+              id="cpf"
+              name="cpf"
+              label="CPF"
+              value={form.cpf}
+              onChange={(value: string) =>
+                handleChange("cpf", value)
               }
               error={errors.cpf}
             />
@@ -496,8 +512,6 @@ export default function UserForm({
             />
 
             {/*
-             * UBS
-             */}
             <SelectInput
               id="ubsId"
               name="ubsId"
@@ -525,11 +539,30 @@ export default function UserForm({
                 })
               )}
               error={errors.ubsId}
+            />*/}
+            <SelectInput
+              id="ubsId"
+              name="ubsId"
+              label="UBS"
+              value={form.ubsId}
+              onChange={(value: string) =>
+                handleChange("ubsId", value)
+              }
+              logo={
+                <FontAwesome5
+                  name="hospital"
+                  size={16}
+                  color="#3c6a48"
+                />
+              }
+              options={ubsList.map((ubs) => ({
+                value: String(ubs.id),
+                label: ubs.nome,
+              }))}
+              error={errors.ubsId}
             />
 
             {/*
-             * Perfil
-             */}
             <SelectInput
               id="role"
               name="role"
@@ -559,11 +592,31 @@ export default function UserForm({
                 },
               ]}
               error={errors.role}
+            />*/}
+            <SelectInput
+              id="active"
+              name="active"
+              label="Status"
+              value={String(form.active)}
+              onChange={(value: string) => {
+                setForm((prev) => ({
+                  ...prev,
+                  active: value === "true",
+                }));
+
+                setErrors((prev) => ({
+                  ...prev,
+                  active: "",
+                }));
+              }}
+              options={[
+                { value: "true", label: "Ativo" },
+                { value: "false", label: "Inativo" },
+              ]}
             />
 
             {/*
-             * Status
-             */}
+             
             <SelectInput
               id="active"
               name="active"
@@ -593,7 +646,7 @@ export default function UserForm({
                   label: "Inativo",
                 },
               ]}
-            />
+            />*/}
 
             {/*
              * Botão salvar
@@ -604,7 +657,7 @@ export default function UserForm({
                 style={[
                   styles.saveButton,
                   loading &&
-                    styles.disabledButton,
+                  styles.disabledButton,
                 ]}
                 disabled={loading}
                 activeOpacity={0.8}

@@ -14,6 +14,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import SelectInput from "@/components/SelectInput/SelectInput";
 import TxtInput from "@/components/TXTInput/TxtInput";
 
+import DatePickerComp from "@/components/DataPickerComp/DatePickerComp";
 import apiFetch from "@/components/FetchFunc/APIFetch";
 
 export default function OcorrenciaModalUser({
@@ -534,6 +535,7 @@ export default function OcorrenciaModalUser({
                         }
                         placeholder="AAAA-MM-DD"
                     />
+                    <DatePickerComp form={form} handleChange={handleChange}></DatePickerComp>
                 </ScrollView>
 
                 {/* FOOTER */}

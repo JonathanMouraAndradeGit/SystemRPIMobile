@@ -14,6 +14,7 @@ import TxtInput from "@/components/TXTInput/TxtInput";
 
 import { FontAwesome } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+
 /*
 import {
     FaEraser,
@@ -51,25 +52,42 @@ export default function OcorrenciaFiltersUser({
 
     const baseUrl = process.env.EXPO_PUBLIC_BACK_ROUTE;
 
+    const supervisaoList = [
+        {
+            value: "STS Ermelino Matarazzo",
+            label: "STS Ermelino Matarazzo"
+        },
+        {
+            value: "STS Guaianases",
+            label: "STS Guaianases"
+        },
+        {
+            value: "STS Itaim Paulista",
+            label: "STS Itaim Paulista"
+        },
+        {
+            value: "STS Itaquera",
+            label: "STS Itaquera"
+        },
+        {
+            value: "STS São Mateus",
+            label: "STS São Mateus"
+        },
+        {
+            value: "STS São Miguel Paulista",
+            label: "STS São Miguel Paulista"
+        }
+    ];
+
     /* =========================
        RESPONSIVIDADE
     ========================= */
 
     const containerPadding = isSmallMobile
-        ? 14
-        : isMobile
-            ? 18
-            : isTablet
-                ? 22
-                : 25;
+        ? 14 : isMobile ? 18 : isTablet ? 22 : 25;
 
     const containerGap = isSmallMobile
-        ? 16
-        : isMobile
-            ? 18
-            : isTablet
-                ? 22
-                : 25;
+        ? 16 : isMobile ? 18 : isTablet ? 22 : 25;
 
     const fieldColumns = isMobile ? 1 : 2;
 
@@ -182,6 +200,7 @@ export default function OcorrenciaFiltersUser({
         return await response.json();
     }
 
+    /*
     async function loadUBS() {
 
         try {
@@ -205,6 +224,47 @@ export default function OcorrenciaFiltersUser({
                 err
             );
 
+            setUbsList([]);
+        }
+    }*/
+    useEffect(() => {
+        console.log("buscando por supervisão ")
+        console.log(filters.supervisao)
+        if (filters.supervisao) {
+            loadUBS(filters.supervisao);
+        } else if (!isCommonUser) {
+            loadUBS();
+        }
+
+        // Quando trocar a supervisão, limpa os filtros dependentes
+        onChange("ubsId", "");
+        onChange("microAreaId", "");
+        onChange("enderecoId", "");
+    }, [filters.supervisao]);
+
+    async function loadUBS(supervisao = "") {
+        try {
+            const url = supervisao
+                ? `${process.env.EXPO_PUBLIC_BACK_ROUTE}/ubs/sup?supervisao=${encodeURIComponent(supervisao)}`
+                : `${process.env.EXPO_PUBLIC_BACK_ROUTE}/ubs`;
+
+            const response = await apiFetch(url);
+
+            console.log("buscando por sts -----"+supervisao)
+            console.log("response filte is")
+            console.log(response)
+
+            if (!response.ok) {
+                throw new Error(
+                    `Erro ${response.status}: ${response.statusText}`
+                );
+            }
+
+            const data = await response.json();
+
+            setUbsList(Array.isArray(data) ? data : []);
+        } catch (err) {
+            console.error("Erro ao carregar UBS:", err);
             setUbsList([]);
         }
     }
@@ -350,6 +410,19 @@ export default function OcorrenciaFiltersUser({
     /* =========================
        HANDLERS
     ========================= */
+    function handleSupChange(value: string) {
+
+        if (isCommonUser) {
+            return;
+        }
+        onChange("supervisao", value);
+
+        onChange("ubsId", "");
+
+        onChange("microAreaId", "");
+
+        onChange("enderecoId", "");
+    }
 
     function handleUbsChange(value: string) {
 
@@ -413,6 +486,7 @@ export default function OcorrenciaFiltersUser({
                 FILTROS
             ========================= */}
 
+
             <View
                 style={[
                     styles.grid,
@@ -425,6 +499,25 @@ export default function OcorrenciaFiltersUser({
                     },
                 ]}
             >
+                <View
+                    style={{
+                        width:
+                            fieldColumns === 1
+                                ? "100%"
+                                : "48%",
+                    }}
+                >
+                    <SelectInput
+                        id="supervisao"
+                        name="supervisao"
+                        label="Supervisão"
+                        value={filters.supervisao || ""}
+                        onChange={(value: string) => onChange("supervisao", value)}
+                        disabled={isCommonUser}
+                        options={supervisaoList}
+                    />
+
+                </View>
 
                 {/* UBS */}
 
@@ -582,7 +675,7 @@ export default function OcorrenciaFiltersUser({
                         label={config.tipoLabel}
                         value={
                             filters[
-                                config.tipoField
+                            config.tipoField
                             ]
                         }
                         /*logo={
@@ -688,11 +781,11 @@ export default function OcorrenciaFiltersUser({
                 {/* PESQUISAR */}
 
                 <TouchableOpacity
-                    style={[styles.button,styles.searchButton,
-                        {
-                            flex: isSmallMobile ? 1 : undefined,
-                            paddingHorizontal: isSmallMobile ? 12 : 18,
-                        },
+                    style={[styles.button, styles.searchButton,
+                    {
+                        flex: isSmallMobile ? 1 : undefined,
+                        paddingHorizontal: isSmallMobile ? 12 : 18,
+                    },
                     ]}
                     onPress={onSearch}
                     activeOpacity={0.8}>
@@ -713,10 +806,10 @@ export default function OcorrenciaFiltersUser({
                 {/* LIMPAR */}
 
                 <TouchableOpacity
-                    style={[styles.button,styles.clearButton,{
-                            flex: isSmallMobile ? 1 : undefined,
-                            paddingHorizontal: isSmallMobile ? 12 : 18,
-                        },
+                    style={[styles.button, styles.clearButton, {
+                        flex: isSmallMobile ? 1 : undefined,
+                        paddingHorizontal: isSmallMobile ? 12 : 18,
+                    },
                     ]}
                     onPress={onClear}
                     activeOpacity={0.8}
@@ -730,7 +823,7 @@ export default function OcorrenciaFiltersUser({
                     />
 
                     {!isSmallMobile && (
-                        <Text style={[styles.buttonText,styles.clearText,]}>
+                        <Text style={[styles.buttonText, styles.clearText,]}>
                             Limpar filtros
                         </Text>
                     )}

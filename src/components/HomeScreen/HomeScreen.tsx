@@ -1,21 +1,27 @@
-import React from "react";
 
 import {
-    View,
-    Text,
     Pressable,
-    StyleSheet,
     ScrollView,
+    StyleSheet,
+    Text,
+    View,
 } from "react-native";
 
-import {
-    FontAwesome5,
-} from "@expo/vector-icons";
+import OKMsg from "../Alerts/OKMsg2";
 
 export default function HomeSection() {
 
     function acessarSistema() {
+        /*
         console.log("Acessar Sistema");
+        Toast.show({
+            type: "success",
+            text1: "Acesso ao sistema",
+            text2: "Botão clicado com sucesso!",
+            position: "top",
+            visibilityTime: 4000,
+        });*/
+        OKMsg("Botão clicado com sucesso!")
     }
 
     function saibaMais() {
@@ -154,7 +160,6 @@ export default function HomeSection() {
                 </View>
 
             </View>
-
         </ScrollView>
     );
 }

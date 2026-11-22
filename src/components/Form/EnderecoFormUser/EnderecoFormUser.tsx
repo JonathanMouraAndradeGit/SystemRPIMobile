@@ -24,6 +24,7 @@ import ErrMsg from "@/components/Alerts/ErrMsg";
 import apiFetch from "@/components/FetchFunc/APIFetch";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+import OKMsg from "@/components/Alerts/OKMsg2";
 
 const INITIAL_FORM = {
     id: null as number | null,
@@ -74,7 +75,7 @@ export default function EnderecoFormUser({
 
     async function initialize() {
         try {
-            const user:any = await AsyncStorage.getItem("user");
+            const user: any = await AsyncStorage.getItem("user");
             if (!user) {
                 return;
             }
@@ -86,12 +87,12 @@ export default function EnderecoFormUser({
                 return;
             }
             setIsCommonUser(true);
-            const [ubsResponse,microResponse,] = await Promise.all([
+            const [ubsResponse, microResponse,] = await Promise.all([
                 apiFetch(
                     `${BACK_ROUTE}/users/ubs/${user.cpf}`
                 ),
                 apiFetch(
-                        `${BACK_ROUTE}/users/microareas/${user.cpf}`
+                    `${BACK_ROUTE}/users/microareas/${user.cpf}`
                 ),
 
             ]);
@@ -107,7 +108,7 @@ export default function EnderecoFormUser({
 
             setUbsList([ubs,]);
             setMicroAreaList(microAreas);
-            setForm(prev => ({...prev,ubs:String(ubs.id),}));
+            setForm(prev => ({ ...prev, ubs: String(ubs.id), }));
         } catch (err) {
 
             console.error(
@@ -133,19 +134,19 @@ export default function EnderecoFormUser({
             numero: obj.numero ?? "",
             latitude: obj.latitude ?? null,
             longitude: obj.longitude ?? null,
-            ubs: String( ubsId ?? ""),
+            ubs: String(ubsId ?? ""),
             microAreaId: String(obj.microArea?.id ?? ""),
         });
-        if (ubsId &&!isCommonUser) {
+        if (ubsId && !isCommonUser) {
             loadMicroArea(ubsId);
         }
     }, [obj]);
 
-    function handleChange(name: string,value: any) {
-        setForm(prev => ({...prev,[name]: value,}));
-        setErrors(prev => ({...prev,[name]: "",}));
+    function handleChange(name: string, value: any) {
+        setForm(prev => ({ ...prev, [name]: value, }));
+        setErrors(prev => ({ ...prev, [name]: "", }));
         if (name === "ubs") {
-            setForm(prev => ({...prev,microAreaId: "",}));
+            setForm(prev => ({ ...prev, microAreaId: "", }));
             loadMicroArea(value);
         }
 
@@ -154,7 +155,8 @@ export default function EnderecoFormUser({
         if (!address) {
             return;
         }
-        setForm(prev => ({...prev,
+        setForm(prev => ({
+            ...prev,
             place: address,
             logradouro: address.logradouro ?? "",
             numero: address.numero ?? "",
@@ -172,7 +174,7 @@ export default function EnderecoFormUser({
             const data = await response.json();
             setUbsList(data);
         } catch (err) {
-            console.error("Erro ao carregar UBS:",err);
+            console.error("Erro ao carregar UBS:", err);
         }
     }
     async function loadMicroArea(ubsId: any) {
@@ -185,18 +187,22 @@ export default function EnderecoFormUser({
             const data = await response.json();
             setMicroAreaList(data);
         } catch (err) {
-            console.error("Erro ao carregar Micro Áreas:",err);
+            console.error("Erro ao carregar Micro Áreas:", err);
         }
     }
 
     async function submit() {
+
+        console.log("submitting here")
         if (!form.logradouro?.trim() || !String(form.numero ?? "").trim()
         ) {
-            await ErrMsg("Selecione um endereço e informe o número.");
+            console.log("Selecione um endereço e informe o número.")
+            ErrMsg("Selecione um endereço e informe o número.");
             return;
         }
         if (!form.microAreaId) {
-            await ErrMsg("Selecione uma Micro Área.");
+            console.log("Selecione uma Micro Área.")
+            ErrMsg("Selecione uma Micro Área.");
             return;
         }
 
@@ -289,24 +295,11 @@ export default function EnderecoFormUser({
              * Limpa formulário
              */
 
-            setForm(
-                INITIAL_FORM
-            );
-
-
-            setMicroAreaList(
-                []
-            );
-
-
-            setShowAdvanced(
-                false
-            );
-
-
+            setForm(INITIAL_FORM);
+            setMicroAreaList([]);
+            setShowAdvanced(false);
+            OKMsg("sucesso")
             onSuccess?.();
-
-
         } catch (error) {
 
             console.error(
@@ -314,10 +307,7 @@ export default function EnderecoFormUser({
             );
 
 
-            /*
-            await ErrMsg(
-                "Erro ao realizar operação."
-            );*/
+            await ErrMsg("Erro ao realizar operação.");
 
 
         } finally {
@@ -353,7 +343,7 @@ export default function EnderecoFormUser({
 
             <Pressable
                 style={styles.advancedButton}
-                onPress={() =>setShowAdvanced(prev => !prev)
+                onPress={() => setShowAdvanced(prev => !prev)
                 }
             >
                 <Text
@@ -392,8 +382,9 @@ export default function EnderecoFormUser({
                         value={
                             form.logradouro
                         }
-                        onChangeText={(value: String) =>{
-                            handleChange("logradouro",value)}
+                        onChangeText={(value: String) => {
+                            handleChange("logradouro", value)
+                        }
                         }
 
                         logo={
@@ -515,7 +506,7 @@ export default function EnderecoFormUser({
                 name="ubs"
                 label="UBS"
                 value={form.ubs}
-                onChange={(value: any) =>handleChange("ubs",value)
+                onChange={(value: any) => handleChange("ubs", value)
                 }
                 logo={
                     <FontAwesome
@@ -527,7 +518,8 @@ export default function EnderecoFormUser({
                 disabled={isCommonUser}
                 options={
                     ubsList.map(
-                        ubs => ({value:String(ubs.id),
+                        ubs => ({
+                            value: String(ubs.id),
                             label: ubs.nome,
                         })
                     )
@@ -537,7 +529,31 @@ export default function EnderecoFormUser({
 
             {microAreaList.length > 0 && (
 
-                <SelectInput
+                <>
+                    <SelectInput
+                        id="microAreaId"
+                        name="microAreaId"
+                        label="Micro Área"
+                        value={form.microAreaId}
+                        onChange={(value: any) =>
+                            handleChange("microAreaId", value)
+                        }
+                        logo={
+                            <FontAwesome
+                                name="hospital-o"
+                                size={18}
+                                color="#3c6a48"
+                            />
+                        }
+                        options={microAreaList.map(
+                            (micro) => ({
+                                value: String(micro.id),
+                                label: `${micro.codigo} - ${micro.equipe}`,
+                            })
+                        )}
+                        error={errors.microAreaId}
+                    />
+                    {/*<SelectInput
 
                     id="microAreaId"
 
@@ -574,14 +590,15 @@ export default function EnderecoFormUser({
                         )
                     }
                     error={errors.microAreaId}
-                />
+                />*/}
+                </>
 
             )}
 
             <View style={styles.buttons}>
                 <Pressable
                     style={[styles.button,
-                        loading && styles.buttonDisabled,
+                    loading && styles.buttonDisabled,
                     ]}
                     onPress={submit}
                     disabled={loading}

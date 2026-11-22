@@ -13,6 +13,7 @@ import InfoMapComp from "./page/InfoMapComp/InfoMapComp";
 */
 import HomeSection from "@/components/HomeScreen/HomeScreen";
 import NavBar from "@/components/NavBar/NavBar";
+import Toast from "react-native-toast-message";
 
 export default function App() {
 
@@ -58,6 +59,7 @@ export default function App() {
                     component={InfoMapComp}
                 />
                 */}
+                <Toast></Toast>
         </>
     );
 }

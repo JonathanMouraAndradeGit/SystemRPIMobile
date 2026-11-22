@@ -1,5 +1,7 @@
+import ErrMsg from "@/components/Alerts/ErrMsg2";
 import apiFetch from "@/components/FetchFunc/APIFetch";
 import ResponsiveButton from "@/components/ResponsiveForm/ResponsiveForm";
+import SelectInput from "@/components/SelectInput/SelectInput2";
 import TxtInput from "@/components/TXTInput/TxtInput";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -9,11 +11,13 @@ import {
     Text,
     View
 } from "react-native";
+import OKMsg from "../../Alerts/OKMsg2";
 
 const INITIAL_FORM = {
     nome: "",
     cidade: "",
     subprefeitura: "",
+    supervisao:""
 };
 
 type UBSData = {
@@ -21,6 +25,7 @@ type UBSData = {
     nome?: string;
     cidade?: string;
     subprefeitura?: string;
+    supervisao?: string
 };
 
 type UBSFormProps = {
@@ -46,6 +51,7 @@ export default function UBSForm({
                 nome: data.nome ?? "",
                 cidade: data.cidade ?? "",
                 subprefeitura: data.subprefeitura ?? "",
+                supervisao: data.supervisao ?? ""
             });
         } else {
             setForm(INITIAL_FORM);
@@ -84,6 +90,10 @@ export default function UBSForm({
             newErrors.subprefeitura = "Campo obrigatório";
         }
 
+        if (!form.supervisao.trim()) {
+            newErrors.supervisao = "Campo obrigatório";
+        }
+
         setErrors(newErrors);
 
         return Object.keys(newErrors).length === 0;
@@ -120,13 +130,12 @@ export default function UBSForm({
                 throw new Error();
             }
 
-            //await OKMsg("Operação realizada com sucesso!");
+            OKMsg("Operação realizada com sucesso!");
 
             onSuccess?.();
         } catch (err) {
             console.error(err);
-
-            //await ErrMsg("Erro ao realizar operação.");
+            ErrMsg("Erro ao realizar operação.");
         } finally {
             setLoading(false);
         }
@@ -194,6 +203,46 @@ export default function UBSForm({
                     />
                 }
                 error={errors.subprefeitura}
+            />
+            <SelectInput
+                id="supervisaoId"
+                name="supervisao"
+                label="Supervisão"
+                value={form.supervisao}
+                onChange={(value: string) =>
+                    handleChange("supervisao", value)}
+                logo={<MaterialCommunityIcons
+                        name="hospital-building"
+                        size={25}
+                        color="#3c6a48"
+                    />}
+                error={errors.supervisao}
+                options={[
+                    {
+                        value: "STS Ermelino Matarazzo",
+                        label: "STS Ermelino Matarazzo"
+                    },
+                    {
+                        value: "STS Guaianases",
+                        label: "STS Guaianases"
+                    },
+                    {
+                        value: "STS Itaim Paulista",
+                        label: "STS Itaim Paulista"
+                    },
+                    {
+                        value: "STS Itaquera",
+                        label: "STS Itaquera"
+                    },
+                    {
+                        value: "STS São Mateus",
+                        label: "STS São Mateus"
+                    },
+                    {
+                        value: "STS São Miguel Paulista",
+                        label: "STS São Miguel Paulista"
+                    }
+                ]}
             />
 
             <View style={styles.buttons}>

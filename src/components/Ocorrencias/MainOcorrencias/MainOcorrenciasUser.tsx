@@ -105,6 +105,13 @@ export default function OcorrenciasUser({ config }: any) {
 
                 if (filters.ubsId) {
                     params.append(
+                        "supervisao",
+                        filters.supervisao
+                    );
+                }
+
+                if (filters.ubsId) {
+                    params.append(
                         "ubsId",
                         filters.ubsId
                     );
