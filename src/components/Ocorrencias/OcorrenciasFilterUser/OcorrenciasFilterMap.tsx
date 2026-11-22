@@ -86,7 +86,7 @@ export default function OcorrenciaFilterMap({
             }
         }
 
-        initializeUBS();
+        void initializeUBS();
     }, []);
 
     /*
@@ -100,7 +100,7 @@ export default function OcorrenciaFilterMap({
             return;
         }
 
-        loadCategorias();
+        void loadCategorias();
     }, [config?.categoriaEndpoint]);
 
     /*
@@ -116,7 +116,7 @@ export default function OcorrenciaFilterMap({
             return;
         }
 
-        loadMicroAreas(filters.ubsId);
+        void loadMicroAreas(filters.ubsId);
     }, [filters.ubsId]);
 
     /*
@@ -132,7 +132,7 @@ export default function OcorrenciaFilterMap({
         }
 
         let rs = async ()=>{await loadEnderecos(filters.microAreaId);}
-        rs()
+        void rs()
     }, [filters.microAreaId]);
 
     /*
@@ -150,7 +150,7 @@ export default function OcorrenciaFilterMap({
             return;
         }
 
-        loadTipos(filters.categoriaId);
+        void loadTipos(filters.categoriaId);
     }, [
         filters.categoriaId,
         config?.tipoEndpoint,

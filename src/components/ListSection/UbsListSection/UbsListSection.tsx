@@ -272,7 +272,7 @@ useEffect(() => {
 
     const timer = setTimeout(() => {
 
-        loadUBS(
+        void loadUBS(
             page,
             filter
         );
@@ -404,7 +404,7 @@ return (
 
                 onSuccess={() => {
 
-                    loadUBS(
+                    void loadUBS(
                         page,
                         filter
                     );

@@ -56,7 +56,7 @@ export default function UserForm({
    * Carrega as UBS
    */
   useEffect(() => {
-    loadUBS();
+    void loadUBS();
   }, []);
 
   /*
@@ -193,7 +193,8 @@ export default function UserForm({
       newErrors.email =
         "Campo obrigatório";
     } else if (
-      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
+      //!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
+      /^\S+@\S+\.\S+$/.test(
         form.email
       )
     ) {

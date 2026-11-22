@@ -1,23 +1,23 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import {
-    View,
-    Text,
-    Pressable,
-    Modal,
-    Alert,
     ActivityIndicator,
+    Alert,
+    Modal,
+    Pressable,
     StyleSheet,
+    Text,
+    View,
 } from "react-native";
 
+import { AntDesign, EvilIcons } from "@expo/vector-icons";
 import Feather from '@expo/vector-icons/Feather';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
-import {EvilIcons,AntDesign } from "@expo/vector-icons"
 
-import TxtInput from "../TXTInput/TxtInput";
-import SelectInput from "../SelectInput/SelectInput";
 import CpfInput from "../CpfInput/CPFInput";
+import SelectInput from "../SelectInput/SelectInput";
+import TxtInput from "../TXTInput/TxtInput";
 
 ///import TxtInput from "../../Component/TxtInput/TxtInput";
 //import SelectInput from "../../Component/SelectInput/SelectInput";
@@ -63,7 +63,7 @@ export default function UserForm({
     */
 
     useEffect(() => {
-        loadUBS();
+        void loadUBS();
     }, []);
 
 
@@ -177,7 +177,8 @@ export default function UserForm({
         }
         if (!form.email.trim()) {
             newErrors.email = "Campo obrigatório";
-        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+        } else if (//!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)
+            /^\S+@\S+\.\S+$/.test(form.email)) {
             newErrors.email ="E-mail inválido";
         }
         if (!editing &&!form.password.trim()) {

@@ -28,7 +28,7 @@ export default function NavBar({
     const [user, setUser] = useState<any>(null);
 
     useEffect(() => {
-        loadUser();
+        void loadUser();
     }, [userAuth]);
 
     async function loadUser() {
@@ -160,7 +160,7 @@ export default function NavBar({
             </Pressable>
 
             {/* Tudo abaixo fica oculto em telas pequenas */}
-            {true && (
+            {(
                 <>
                     {/* LOGIN */}
                     {!user && (

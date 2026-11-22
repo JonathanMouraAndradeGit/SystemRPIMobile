@@ -234,7 +234,7 @@ export default function CategoriaListSection({
       }
     }
 
-    initializeSocket();
+    void initializeSocket();
 
     /*
      * ==========================================

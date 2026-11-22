@@ -141,7 +141,7 @@ export default function OcorrenciaFiltersUser({
             }
         }
 
-        initialize();
+        void initialize();
     }, []);
 
     /* =========================
@@ -151,7 +151,7 @@ export default function OcorrenciaFiltersUser({
     useEffect(() => {
 
         if (filters.ubsId) {
-            loadMicroAreas(filters.ubsId);
+            void loadMicroAreas(filters.ubsId);
         } else {
             setMicroAreaList([]);
             setEnderecoList([]);
@@ -166,7 +166,7 @@ export default function OcorrenciaFiltersUser({
     useEffect(() => {
 
         if (filters.microAreaId) {
-            loadEnderecos(filters.microAreaId);
+            void loadEnderecos(filters.microAreaId);
         } else {
             setEnderecoList([]);
         }
@@ -180,7 +180,7 @@ export default function OcorrenciaFiltersUser({
     useEffect(() => {
 
         if (filters.categoriaId) {
-            loadTipos(filters.categoriaId);
+            void loadTipos(filters.categoriaId);
         } else {
             setTipoRiscoList([]);
         }
@@ -231,9 +231,9 @@ export default function OcorrenciaFiltersUser({
         console.log("buscando por supervisão ")
         console.log(filters.supervisao)
         if (filters.supervisao) {
-            loadUBS(filters.supervisao);
+            void loadUBS(filters.supervisao);
         } else if (!isCommonUser) {
-            loadUBS();
+            void loadUBS();
         }
 
         // Quando trocar a supervisão, limpa os filtros dependentes
@@ -769,7 +769,7 @@ export default function OcorrenciaFiltersUser({
                         flexDirection:
                             isSmallMobile
                                 ? "row"
-                                : "row",
+                                : "column",
 
                         gap: isSmallMobile
                             ? 10

@@ -41,7 +41,7 @@ export default function RegisterModal({
     const [errors, setErrors] =
         useState<any>({});
     useEffect(() => {
-        loadUBS();
+        void loadUBS();
     }, []);
 
     async function loadUBS() {
@@ -139,9 +139,10 @@ export default function RegisterModal({
             newErrors.email =
                 "Campo obrigatório";
         } else if (
-            !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
+            /*!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
                 form.email
-            )
+            )*/
+           /^\S+@\S+\.\S+$/.test(form.email)
         ) {
             newErrors.email =
                 "E-mail inválido";

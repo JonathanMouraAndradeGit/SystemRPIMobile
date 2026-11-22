@@ -471,7 +471,7 @@ export default function OcorrenciasUser({ config }: any) {
             result => {
                 cleanup = result;
             }
-        );
+        ).catch(error => reportError(error));;
 
 
         return () => {

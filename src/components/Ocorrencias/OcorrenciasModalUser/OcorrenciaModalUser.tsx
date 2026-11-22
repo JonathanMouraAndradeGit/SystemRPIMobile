@@ -84,7 +84,7 @@ export default function OcorrenciaModalUser({
             }
         }
 
-        initialize();
+        void initialize();
     }, []);
 
     /*
@@ -126,7 +126,7 @@ export default function OcorrenciaModalUser({
             await loadTipos(values.categoriaId);
         }
 
-        loadOcorrencia();
+        void loadOcorrencia();
     }, [ocorrencia]);
 
     /*

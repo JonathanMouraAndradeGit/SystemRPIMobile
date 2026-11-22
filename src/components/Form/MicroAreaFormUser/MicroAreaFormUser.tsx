@@ -166,7 +166,7 @@ export default function MicroAreaFormUser({
 
         }
 
-        initialize();
+        void initialize();
 
     }, [obj]);
 
@@ -383,7 +383,7 @@ export default function MicroAreaFormUser({
 
             }
 
-            OKMsg("Operação realizada com sucesso!");
+            void OKMsg("Operação realizada com sucesso!");
             onSuccess?.();
             setForm(INITIAL_FORM);
             setErrors({});

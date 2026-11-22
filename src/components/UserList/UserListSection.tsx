@@ -41,9 +41,9 @@ export default function UserListSection({
   const socketRef = useRef<Socket | null>(null);
 
   useEffect(() => {
-    async () => {
-      await load(page, filter);
-    }
+    //async () => {
+      void load(page, filter);
+    //}
   }, [page, filter]);
 
   useEffect(() => {
@@ -88,7 +88,7 @@ export default function UserListSection({
       }
     }
 
-    setupSocket();
+    void setupSocket();
 
     return () => {
       cancelled = true;
@@ -153,11 +153,11 @@ export default function UserListSection({
           method: "DELETE",
         }
       );
-      OKMsg("usuário excluido")
+      void OKMsg("usuário excluido")
 
-      load(page, filter);
+      void load(page, filter);
     } catch (error) {
-      ErrMsg("Erro ao excluir usuário:")
+      void ErrMsg("Erro ao excluir usuário:")
       console.error("Erro ao excluir usuário:", error);
     }/*
           },

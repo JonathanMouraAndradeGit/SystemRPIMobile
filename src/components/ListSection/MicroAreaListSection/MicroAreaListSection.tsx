@@ -240,7 +240,7 @@ export default function MicroAreaListSectionUser() {
             }
         }
 
-        initialize();
+        void initialize();
 
         return () => {
 

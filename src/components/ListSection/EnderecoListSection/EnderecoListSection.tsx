@@ -223,7 +223,7 @@ export default function EnderecoListSectionUser() {
 
         }
 
-        setupSocket();
+        void setupSocket();
 
         return () => {
 
